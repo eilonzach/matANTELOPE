@@ -1,0 +1,19 @@
+#!/bin/bash
+# This script is designed to be run after the dbstation_rotation, it deletes pre-rotated data from wfdisc table and merges rotated wfdisc rows into existing wfdisc
+
+db=../pngbodydb_tables/pngbodydb 	#for example
+out=_rot
+
+#remove pre-rotated data from main wfdisc table
+for sta in KEIA JONE PEMM GOGO # list of stations
+do
+	dbsubset -v $db.wfdisc "sta == '$sta'" | dbdelete -v -
+done
+
+# make any other edits
+#dbsubset -v pngbodydb.wfdisc "sta == 'B' && chan == 'BHE'" | dbset - chanid 169 215
+#dbsubset -v pngbodydb.wfdisc "sta == 'B' && chan == 'BHN'" | dbset - chanid 170 216
+#dbsubset -v $db$out.wfdisc "sta == 'B'" | dbdelete -v -
+
+# merge rot wfdisc into main wfdisc
+dbmerge $db$out $db

@@ -1,0 +1,2 @@
+#dbset -cvv pngbodydb.wfdisc dir '*' 'patsub(dir, "data", "/Volumes/Portadb/PORTAPNGBODY")'
+dbset -cvv pngbodydb.wfdisc dir '*' 'patsub(dir, "PORTAPNGBODY", "PORTAPNGBODY/pngbodydb_tables/data")'

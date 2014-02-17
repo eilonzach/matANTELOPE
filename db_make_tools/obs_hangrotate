@@ -1,0 +1,31 @@
+#!/bin/bash
+# This script requires a file of station correction angles in the format:
+## statA corrA
+## statB corrB
+## statC corrC
+# etc. stat* is the name of the station (must match the antelope tables)
+# and corr* is the actual direction that the station "north" is pointing - in degrees, from 0-359
+# The values of sensor orientation in the sitechan table are adjusted accordingly
+
+## Required inputs - the name of the database and the file with the correction angles
+db=../pngbodydb 	#for example
+echo "Give the name of the file containing the rotation data"
+read INFILE
+
+## Display station correction angles data
+awk 'BEGIN {print "Stations and rotation angles"} {print $0}' < $INFILE
+
+## Correct "hang" values in antelope database
+for i in $(awk '{print $1}' < $INFILE); do
+stat=$i
+corr_N=$(awk -v STAT=$stat '$1==STAT {print $2}' < $INFILE)
+corr_E=$(awk -v STAT=$stat '$1==STAT {if ($2 > 270) {print $2-270} else {print $2+90}}' < $INFILE)
+
+echo "=== Rotating station $stat ==="
+dbset -cv $db.sitechan hang "chan=='BH0' && sta=='$stat'" "$corr_E" 
+dbset -cv $db.sitechan hang "chan=='BH1' && sta=='$stat'" "$corr_N"
+# N.B. If a verbose output is not required, remove the "-v" in the two lines above
+# N.B. If confirmations for each change are not required, remove the "-c" in the two lines above
+
+done
+
