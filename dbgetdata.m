@@ -151,7 +151,7 @@ chans = unique(dbgetv(dbwf,'chan'));
 try
     tr = trload_css(dbwf,tstart,tend);
 catch
-    fprintf('No data in this window for %s/n',sta);
+    fprintf('No data in this window for %s\n',sta);
     return
 end
 
