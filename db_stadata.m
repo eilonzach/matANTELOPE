@@ -1,5 +1,5 @@
-function [ nstas,stas,slats,slons,selevs,ondate,offdate,staname ] = db_stadata( dbdir,dbnam )
-% [ nstas,stas,slats,slons,selevs,ondate,offdate,staname ] = db_stadata( dbdir,dbnam )
+function [ nstas,stas,slats,slons,selevs,ondate,offdate,staname,statype ] = db_stadata( dbdir,dbnam )
+% [ nstas,stas,slats,slons,selevs,ondate,offdate,staname,statype ] = db_stadata( dbdir,dbnam )
 %   Grab station data from database
 
 if nargin<2 % if only one arg given, assume it's dbnam, and we're in the right dir 
@@ -12,7 +12,7 @@ end
 
 db = dbopen([dbdir,dbnam],'r');
 dbsi = dblookup_table(db,'site');
-[stas,slats,slons,selevs,ondate,offdate,staname] = dbgetv(dbsi,'sta','lat','lon','elev','ondate','offdate','staname');
+[stas,slats,slons,selevs,ondate,offdate,staname,statype] = dbgetv(dbsi,'sta','lat','lon','elev','ondate','offdate','staname','statype');
 nstas = dbnrecs(dbsi);
 dbclose(db)
 
